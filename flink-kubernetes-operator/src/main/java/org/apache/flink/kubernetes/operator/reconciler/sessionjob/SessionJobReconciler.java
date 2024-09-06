@@ -129,7 +129,8 @@ public class SessionJobReconciler
                                     : UpgradeMode.STATELESS;
                     cancelJob(ctx, upgradeMode);
                 } catch (ExecutionException e) {
-                    if (findThrowable(e, FlinkJobNotFoundException.class).isPresent()) {
+                    if (findThrowable(e, FlinkJobNotFoundException.class).isPresent()
+                            || e.getMessage().contains("Job could not be found")) {
                         LOG.error("Job {} not found in the Flink cluster.", jobID, e);
                         return DeleteControl.defaultDelete();
                     }
